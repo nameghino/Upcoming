@@ -12,7 +12,7 @@ import UIKit
 class MoviesListViewModel<T: MoviesPagedResponse>: NSObject {
     let moviesService: PagedMoviesService
     let postersService: PostersService
-    let viewController: UIViewController?
+    let searchStarter: Searcher?
 
     internal(set) var movies: [MovieViewModel] = [] {
         didSet {
@@ -30,10 +30,10 @@ class MoviesListViewModel<T: MoviesPagedResponse>: NSObject {
     var rightBarButtonItem: UIBarButtonItem? { return nil }
     var title: String { return "" }
 
-    init(moviesService: PagedMoviesService, postersService: PostersService, viewController: UIViewController? = nil) {
+    init(moviesService: PagedMoviesService, postersService: PostersService, searchStarter: Searcher? = nil) {
         self.moviesService = moviesService
         self.postersService = postersService
-        self.viewController = viewController
+        self.searchStarter = searchStarter
     }
 
     func update() { }

@@ -14,7 +14,7 @@ class UpcomingMoviesListViewModel<T: MoviesPagedResponse>: MoviesListViewModel<T
     override var title: String { return "Upcoming" }
 
     override var rightBarButtonItem: UIBarButtonItem? {
-        return UIBarButtonItem(barButtonSystemItem: .search, target: viewController, action: #selector(MoviesListViewController.startSearch))
+        return UIBarButtonItem(barButtonSystemItem: .search, target: searchStarter, action: #selector(Searcher.startSearch))
     }
 
     override func update() {

@@ -42,10 +42,16 @@ class MovieCell: UITableViewCell {
     }
 }
 
-class MoviesListViewController: UIViewController {
+@objc protocol Searcher {
+    func startSearch()
+    func runSearch(query: String)
+    func dismissSearch()
+}
+
+class MoviesListViewController: UIViewController, Searcher {
     lazy private(set) var viewModel: MoviesListViewModel<TMDBUpcomingMoviesResponse> = {
         let tmdbService = TMDBService()
-        let viewModel = UpcomingMoviesListViewModel<TMDBUpcomingMoviesResponse>(moviesService: tmdbService, postersService: tmdbService, viewController: self)
+        let viewModel = UpcomingMoviesListViewModel<TMDBUpcomingMoviesResponse>(moviesService: tmdbService, postersService: tmdbService, searchStarter: self)
         return viewModel
     }()
 
@@ -131,7 +137,7 @@ class MoviesListViewController: UIViewController {
         guard
             let moviesList = storyboard.instantiateViewController(withIdentifier: "MoviesListViewController") as? MoviesListViewController
             else { return }
-        moviesList.viewModel = SearchResultsMovieListViewModel(query: query, moviesService: viewModel.moviesService, postersService: viewModel.postersService, viewController: self)
+        moviesList.viewModel = SearchResultsMovieListViewModel(query: query, moviesService: viewModel.moviesService, postersService: viewModel.postersService, searchStarter: self)
 
         let navigationVC = UINavigationController(rootViewController: moviesList)
         present(navigationVC, animated: true, completion: nil)

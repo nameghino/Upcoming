@@ -17,12 +17,12 @@ class SearchResultsMovieListViewModel<T: MoviesPagedResponse>: MoviesListViewMod
     override var title: String { return "Search" }
 
     override var leftBarButtonItem: UIBarButtonItem? {
-        return UIBarButtonItem(title: "Cancel", style: .done, target: viewController, action: #selector(MoviesListViewController.dismissSearch))
+        return UIBarButtonItem(title: "Cancel", style: .done, target: searchStarter, action: #selector(Searcher.dismissSearch))
     }
 
-    init(query: String, moviesService: PagedMoviesService, postersService: PostersService, viewController: UIViewController) {
+    init(query: String, moviesService: PagedMoviesService, postersService: PostersService, searchStarter: Searcher) {
         self.query = query
-        super.init(moviesService: moviesService, postersService: postersService, viewController: viewController)
+        super.init(moviesService: moviesService, postersService: postersService, searchStarter: searchStarter)
     }
 
     override func update() {
