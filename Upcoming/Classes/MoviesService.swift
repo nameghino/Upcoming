@@ -6,14 +6,26 @@
 //  Copyright © 2016 BlueTrail Software. All rights reserved.
 //
 
-typealias PagedMoviesServiceUpcomingMoviesCallback = (Result<UpcomingMoviesPagedResponse>) -> Void
-
-protocol UpcomingMoviesPagedResponse {
+protocol MoviesPagedResponse: JSONDecodable {
     var movies: [Movie] { get }
     var currentPage: Int { get }
     var pageCount: Int { get }
+    var moreAvailable: Bool { get }
 }
 
-protocol PagedMoviesService {
-    func fetchUpcomingMovies(page: Int, callback: @escaping PagedMoviesServiceUpcomingMoviesCallback)
+extension MoviesPagedResponse {
+    var moreAvailable: Bool {  return currentPage == pageCount }
+}
+
+protocol CastResponse: JSONDecodable {
+    var cast: [MovieCharacter] { get }
+}
+
+protocol MoviesService {
+    func fetchCast(movie: Movie, callback: @escaping (Result<[MovieCharacter]>) -> Void)
+}
+
+protocol PagedMoviesService: MoviesService {
+    func fetchUpcomingMovies<T: MoviesPagedResponse>(page: Int, callback: @escaping (Result<T>) -> Void)
+    func search<T: MoviesPagedResponse>(query: String, page: Int, callback: @escaping (Result<T>) -> Void)
 }
