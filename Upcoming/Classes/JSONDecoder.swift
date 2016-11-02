@@ -49,4 +49,5 @@ protocol JSONDecodable {
 enum JSONDecodableError: Error {
     case keyNotFound(String)
     case unexpectedValueType(String, key: String)
+    case transformError(String)
 }
