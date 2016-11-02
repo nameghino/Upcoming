@@ -9,14 +9,13 @@
 import Foundation
 
 struct Movie: JSONDecodable {
-
-
-
+    let id: Int
     let title: String
     let releaseDate: Date
     let posterPath: String?
     let overview: String
     let backdropPath: String?
+    let genres: [Genre]
 
     private static let ReleaseDateFormatter: DateFormatter = {
         let df = DateFormatter()
@@ -25,6 +24,7 @@ struct Movie: JSONDecodable {
     }()
 
     init(container: JSONDictionary) throws {
+        id = try "id" <- container
         title = try "title" <- container
         overview = try "overview" <- container
 
@@ -37,5 +37,8 @@ struct Movie: JSONDecodable {
 
         posterPath = try "poster_path" <~ container
         backdropPath = try "backdrop_path" <~ container
+
+        let identifiers: [Int] = try "genre_ids" <- container
+        genres = identifiers.flatMap { Genre.genre(with: $0) }
     }
 }
