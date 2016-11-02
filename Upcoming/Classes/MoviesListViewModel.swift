@@ -7,49 +7,34 @@
 //
 
 import Foundation
+import UIKit
 
-class MoviesListViewModel: NSObject {
-    private let service: PagedMoviesService
+class MoviesListViewModel<T: MoviesPagedResponse>: NSObject {
+    let moviesService: PagedMoviesService
+    let postersService: PostersService
+    let viewController: UIViewController
 
-    private(set) var movies: [MovieViewModel] = [] {
+    internal(set) var movies: [MovieViewModel] = [] {
         didSet {
             onMoviesListUpdated?(self)
         }
     }
 
-    private var pageToFetch: Int = 1
-    private var done: Bool = false
+    var pageToFetch: Int = 1
+    internal(set) var done: Bool = false
 
     var onError: ((Error) -> Void)? = nil
     var onMoviesListUpdated: ((MoviesListViewModel) -> Void)? = nil
 
-    init(service: PagedMoviesService) {
-        self.service = service
+    var leftBarButtonItem: UIBarButtonItem? { return nil }
+    var rightBarButtonItem: UIBarButtonItem? { return nil }
+    var title: String { return "" }
+
+    init(moviesService: PagedMoviesService, postersService: PostersService, viewController: UIViewController) {
+        self.moviesService = moviesService
+        self.postersService = postersService
+        self.viewController = viewController
     }
 
-    func update() {
-        guard !done else {
-            onMoviesListUpdated?(self)
-            return
-        }
-
-        service.fetchUpcomingMovies(page: pageToFetch) { [weak self] (result: Result<UpcomingMoviesPagedResponse>) -> Void in
-            guard let sself = self else { return }
-            if case .error(let error) = result {
-                sself.onError?(error)
-                return
-            }
-
-            guard case .success(let response) = result else { fatalError("should not be here") }
-
-            if sself.pageToFetch < response.pageCount {
-                sself.pageToFetch += 1
-            } else {
-                sself.done = true
-            }
-
-            let movieViewModels = response.movies.map { MovieViewModel(movie: $0) }
-            sself.movies += movieViewModels
-        }
-    }
+    func update() { }
 }
