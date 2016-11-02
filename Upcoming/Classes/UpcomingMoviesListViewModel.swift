@@ -11,7 +11,7 @@ import UIKit
 
 class UpcomingMoviesListViewModel<T: MoviesPagedResponse>: MoviesListViewModel<T> {
 
-    override var title: String { return "Upcoming Movies" }
+    override var title: String { return "Upcoming" }
 
     override var rightBarButtonItem: UIBarButtonItem? {
         return UIBarButtonItem(barButtonSystemItem: .search, target: viewController, action: #selector(MoviesListViewController.startSearch))

@@ -14,7 +14,7 @@ class SearchResultsMovieListViewModel<T: MoviesPagedResponse>: MoviesListViewMod
     let query: String
 
 
-    override var title: String { return "Search Results" }
+    override var title: String { return "Search" }
 
     override var leftBarButtonItem: UIBarButtonItem? {
         return UIBarButtonItem(title: "Cancel", style: .done, target: viewController, action: #selector(MoviesListViewController.dismissSearch))
